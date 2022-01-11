@@ -1206,7 +1206,6 @@ const HeapVisualization: React.FC = () => {
             color: d.free ? Colors.free : 
             d.field_name == null ? Colors.unknown : Colors.selected, 
              }}); 
-            console.log(modifiedData); 
         setBlocks(modifiedData);
         setFilteredBlocks(modifiedData);
         const p5ConfigObj: P5Config = {
@@ -1218,9 +1217,7 @@ const HeapVisualization: React.FC = () => {
             p5ConfigObj.width *= p5ConfigObj.size;
             p5ConfigObj.height *= p5ConfigObj.size*p5ConfigObj.size
         }
-        console.log(p5ConfigObj);
         setP5Config(p5ConfigObj);
-        console.log(blocks);
     }, []);
 
     const onChangecheckboxHandler = () => {
@@ -1231,7 +1228,7 @@ const HeapVisualization: React.FC = () => {
 
   const onChangeHandler = (search: string) => {
     let matches: (string | null)[] = [];
-    console.log(search.length);
+    setBlocks(resetColors(blocks, true));
     if(search.length > 0) {
         const mapBlocks: (string | null)[] = (blocks?.map((b) => b.field_name)).filter((item, pos, self) => {
             return self.indexOf(item) == pos;
@@ -1243,8 +1240,9 @@ const HeapVisualization: React.FC = () => {
             const regex = new RegExp(`${search}`, 'gi');
             return block?.match(regex);
         });
-    } 
-         setBlocks(resetColors(blocks, true));
+    } else {
+      setFilteredBlocks(blocks);
+    }
     
     setSuggestions(matches);  
     setSearch(search);
